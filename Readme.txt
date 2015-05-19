@@ -1,3 +1,11 @@
+
+Gyazo for clipboard
+
+This just copy's the screen-shot to the clipboard
+instead of uploading it to a web server
+
+-----------------------------------
+
 Gyazo
 
 Copyright (c) 2014 Nota Inc.

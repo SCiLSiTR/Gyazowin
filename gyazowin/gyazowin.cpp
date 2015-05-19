@@ -30,6 +30,7 @@ BOOL				savePNG(LPCTSTR fileName, HBITMAP newBMP);
 BOOL				uploadFile(HWND hwnd, LPCTSTR fileName);
 std::string			getId();
 BOOL				saveId(const WCHAR* str);
+BOOL				clipboardFile(HWND hwnd, LPCTSTR fileName);
 
 // エントリーポイント
 int APIENTRY _tWinMain(HINSTANCE hInstance,
@@ -63,7 +64,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		// ファイルをアップロードして終了
 		if (isPng(__targv[1])) {
 			// PNG はそのままupload
-			uploadFile(NULL, __targv[1]);
+			//uploadFile(NULL, __targv[1]);
+			clipboardFile(NULL, __targv[1]);
 		}else {
 			// PNG 形式に変換
 			TCHAR tmpDir[MAX_PATH], tmpFile[MAX_PATH];
@@ -72,7 +74,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			
 			if (convertPNG(tmpFile, __targv[1])) {
 				//アップロード
-				uploadFile(NULL, tmpFile);
+				//uploadFile(NULL, tmpFile);
+				clipboardFile(NULL, tmpFile);
 			} else {
 				// PNGに変換できなかった...
 				MessageBox(NULL, _T("Cannot convert this image"), szTitle, 
@@ -951,4 +954,20 @@ BOOL uploadFile(HWND hwnd, LPCTSTR fileName)
 
 	return FALSE;
 
+}
+
+BOOL clipboardFile(HWND hwnd, LPCTSTR fileName){
+	std::ostringstream	buf;
+	std::ifstream png;
+	png.open(fileName, std::ios::binary);
+	if (png.fail()) {
+		MessageBox(hwnd, _T("PNG open failed"), szTitle, MB_ICONERROR | MB_OK);
+		png.close();
+		return FALSE;
+	}
+	buf << png.rdbuf();		// read all & append to buffer
+	png.close();
+	std::string oMsg(buf.str());
+	setClipBoardText(oMsg.c_str());
+	return true;
 }
