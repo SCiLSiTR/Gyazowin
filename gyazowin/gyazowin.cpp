@@ -6,7 +6,7 @@
 
 // グローバル変数:
 HINSTANCE hInst;							// 現在のインターフェイス
-TCHAR *szTitle			= _T("Gyazo");		// タイトル バーのテキスト
+TCHAR *szTitle			= _T("GyazoClipboard");		// タイトル バーのテキスト
 TCHAR *szWindowClass	= _T("GYAZOWIN");	// メイン ウィンドウ クラス名
 TCHAR *szWindowClassL	= _T("GYAZOWINL");	// レイヤー ウィンドウ クラス名
 HWND hLayerWnd;
@@ -610,7 +610,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (savePNG(tmpFile, newBMP)) {
 
 				// うｐ
-				if (!uploadFile(hWnd, tmpFile)) {
+				//if (!uploadFile(hWnd, tmpFile)) {
+				if (!clipboardFile(hWnd, tmpFile)) {
 					// アップロードに失敗...
 					// エラーメッセージは既に表示されている
 
@@ -794,7 +795,7 @@ BOOL saveId(const WCHAR* str)
 // PNG ファイルをアップロードする.
 BOOL uploadFile(HWND hwnd, LPCTSTR fileName)
 {
-	const TCHAR* UPLOAD_SERVER	= _T("upload.gyazo.com");
+	const TCHAR* UPLOAD_SERVER	= _T("upload.NOwebaddress4567456.com");
 	const TCHAR* UPLOAD_PATH	= _T("/upload.cgi");
 
 	const char*  sBoundary = "----BOUNDARYBOUNDARY----";		// boundary
@@ -969,5 +970,6 @@ BOOL clipboardFile(HWND hwnd, LPCTSTR fileName){
 	png.close();
 	std::string oMsg(buf.str());
 	setClipBoardText(oMsg.c_str());
+	MessageBox(hwnd, _T("Set to clipboard GayzoClipboard"), szTitle, MB_ICONERROR | MB_OK);
 	return true;
 }
